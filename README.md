@@ -1,17 +1,70 @@
-# open_articles_flutter
+# Открытые статьи (Flutter)
 
-A new Flutter project.
+Каталог научных статей открытого доступа. Приложение показывает список статей, поиск, карточку детали, связанные материалы из того же журнала, переключение темы и языка.
 
-## Getting Started
+**Источник данных (домен):** [DOAJ](https://doaj.org) — Directory of Open Access Journals.  
+**Курс:** «Кроссплатформенная разработка», группа ПИН-252т.  
+**Лабораторная:** ЛР2 — каркас (веха В1). Сети пока нет, данные из моков (24 статьи).
 
-This project is a starting point for a Flutter application.
+## Что умеет приложение
 
-A few resources to get you started if this is your first Flutter project:
+- список карточек: заголовок, заглушка журнала, авторы, журнал и год;
+- поиск по названию, автору и ключевым словам;
+- экран детали: аннотация, факты (журнал, издатель, DOI, ISSN), ключевые слова;
+- блок «Ещё из этого журнала» с переходом по стеку навигации;
+- светлая и тёмная тема;
+- интерфейс на русском и английском (содержимое статей не переводится);
+- запуск в браузере и на Windows (также собирается Android).
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Запуск
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter pub get
+flutter run -d chrome
+flutter run -d windows
+```
+
+Проверка, что ключи в ARB совпадают:
+
+```bash
+dart run tool/check_arb.dart
+```
+
+Анализатор:
+
+```bash
+flutter analyze
+```
+
+## Стек
+
+| Пакет | Зачем |
+| --- | --- |
+| `flutter_bloc` | Cubit списка, Bloc детали, Cubit настроек |
+| `go_router` | маршруты `/` и `/article/:id` |
+| `intl` + ARB | локализация подписей UI |
+| `url_launcher` | открытие полного текста статьи |
+
+## Структура
+
+```
+lib/
+  main.dart, app.dart     запуск и сборка зависимостей
+  common/                 навигация, тема, настройки, общие виджеты
+  features/article/
+    data/                 репозиторий на моках, моки
+    domain/               ArticleModel, IArticleRepository
+    presentation/         bloc/, view/, view/widgets/, utils/
+  l10n/                   app_ru.arb, app_en.arb
+tool/check_arb.dart
+```
+
+Слои: UI → Cubit/Bloc → интерфейс репозитория → реализация на моках.  
+В следующей лабораторной (сеть) должна меняться в основном папка `data`.
+
+## Ветки
+
+Работа идёт по git flow:
+
+- `main` / `develop` — база проекта;
+- `feature/lab-2_frame` — каркас ЛР2 (PR в `develop`).
