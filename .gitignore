@@ -49,3 +49,10 @@ app.*.map.json
 
 # сгенерированный код локализации
 /lib/l10n/app_localizations*.dart
+
+# Локальные артефакты сборки в корне
+/open_articles_flutter.exe
+/open_articles_flutter.apk
+/flutter_windows.dll
+/url_launcher_windows_plugin.dll
+/data/
