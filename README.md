@@ -1,20 +1,10 @@
-# Открытые статьи (Flutter)
+﻿# Открытые статьи (Flutter)
 
-Каталог научных статей открытого доступа. Приложение показывает список статей, поиск, карточку детали, связанные материалы из того же журнала, переключение темы и языка.
+Каталог научных статей открытого доступа. Приложение показывает список статей, поиск, карточку детали, связанные материалы, переключение темы и языка.
 
-**Источник данных (домен):** [DOAJ](https://doaj.org) — Directory of Open Access Journals.  
+**Источник данных:** [DOAJ](https://doaj.org) API (`https://doaj.org/api`).  
 **Курс:** «Кроссплатформенная разработка», группа ПИН-252т.  
-**Лабораторная:** ЛР2 — каркас (веха В1). Сети пока нет, данные из моков (24 статьи).
-
-## Что умеет приложение
-
-- список карточек: заголовок, заглушка журнала, авторы, журнал и год;
-- поиск по названию, автору и ключевым словам;
-- экран детали: аннотация, факты (журнал, издатель, DOI, ISSN), ключевые слова;
-- блок «Ещё из этого журнала» с переходом по стеку навигации;
-- светлая и тёмная тема;
-- интерфейс на русском и английском (содержимое статей не переводится);
-- запуск в браузере и на Windows (также собирается Android).
+**Ветка:** `feature/lab-3_network` — сеть вместо моков (ЛР3).
 
 ## Запуск
 
@@ -24,47 +14,34 @@ flutter run -d chrome
 flutter run -d windows
 ```
 
-Проверка, что ключи в ARB совпадают:
+После правки DTO:
+
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+
+Проверка ARB:
 
 ```bash
 dart run tool/check_arb.dart
 ```
 
-Анализатор:
+## Сеть
 
-```bash
-flutter analyze
-```
+Цепочка: `Dio` → `ArticleApi` → `NetworkArticleDataSource` → `ArticleRepository` → Cubit/Bloc → экран.
 
-## Стек
-
-| Пакет | Зачем |
-| --- | --- |
-| `flutter_bloc` | Cubit списка, Bloc детали, Cubit настроек |
-| `go_router` | маршруты `/` и `/article/:id` |
-| `intl` + ARB | локализация подписей UI |
-| `url_launcher` | открытие полного текста статьи |
+У DOAJ есть CORS, поэтому работает и в браузере.
 
 ## Структура
 
 ```
 lib/
-  main.dart, app.dart     запуск и сборка зависимостей
-  common/                 навигация, тема, настройки, общие виджеты
+  app.dart, main.dart
+  common/        navigation, theme, settings, network (Dio, LoadException), widgets
   features/article/
-    data/                 репозиторий на моках, моки
-    domain/               ArticleModel, IArticleRepository
-    presentation/         bloc/, view/, view/widgets/, utils/
-  l10n/                   app_ru.arb, app_en.arb
+    data/          api/, dto/, data_sources/, mappers/, repository
+    domain/        ArticleModel, ArticlePage, IArticleRepository
+    presentation/  bloc/, view/, utils/
+  l10n/
 tool/check_arb.dart
 ```
-
-Слои: UI → Cubit/Bloc → интерфейс репозитория → реализация на моках.  
-В следующей лабораторной (сеть) должна меняться в основном папка `data`.
-
-## Ветки
-
-Работа идёт по git flow:
-
-- `main` / `develop` — база проекта;
-- `feature/lab-2_frame` — каркас ЛР2 (PR в `develop`).
