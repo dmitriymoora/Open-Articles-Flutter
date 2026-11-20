@@ -30,5 +30,17 @@
   "factPublished": "Published",
   "factDoi": "DOI",
   "factIssn": "ISSN",
-  "actionOpenFullText": "Read full text"
+  "actionOpenFullText": "Read full text",
+  "actionRetry": "Retry",
+  "errorNoConnection": "No connection to the server. Check your internet",
+  "errorTimeout": "The server is taking too long to respond",
+  "errorServer": "Server error ({code})",
+  "@errorServer": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "errorBadResponse": "The server sent an unexpected response"
 }
